@@ -1,0 +1,332 @@
+/*Készítsen programot, ami dinamikusan allokált mátrixokat ad össze (addMatrix). Emlékeztetőül a szabály az összeadásra:
+
+Az oszlopok és sorok száma mindkét mátrixnál megegyezik.
+Elemenként adunk össze.
+Amennyiben négyzetes a két mátrix, az eredményen számítsa ki a nyomvonalat (spurt), vagyis a főátló elemeinek összegét. Ha nem négyzetes, térjen vissza 0 eredménnyel!
+
+A mátrixok létrehozásával függvényen belül nem kell foglalkozni.
+
+TIPP: a fejléc legyen a következő
+
+double addMatrix(double** mtx1, const int dimr1, const int dimc1, double** mtx2, const int dimr2, const int dimc2, double** res)*/
+
+#include <iostream>
+
+double addMatrix(
+    double** mtx1, const int dimr1, const int dimc1,
+    double** mtx2, const int dimr2, const int dimc2,
+    double** res)
+{
+    if (dimr1 == dimr2 && dimc1 == dimc2)
+    {
+
+        for (int i = 0; i < dimr1; i++)
+        {
+            for (int j = 0; j < dimc1; j++)
+            {
+                res[i][j] = mtx1[i][j] + mtx2[i][j];
+            }
+        }
+        // Spur számítása
+        if (dimr1 == dimc1)
+        {
+            double spur = 0.0;
+            for (int i = 0; i < dimr1; i++)
+            {
+                spur += res[i][i];
+            }
+            return spur;
+        }
+    }
+    return 0.0;
+}
+
+int main() {
+    // Pelda matrixok
+    const int dimr1 = 3;
+    const int dimc1 = 3;
+    double** mtx1 = new double* [dimr1];
+    for (int i = 0; i < dimr1; i++) {
+        mtx1[i] = new double[dimc1];
+        for (int j = 0; j < dimc1; j++) {
+            mtx1[i][j] = i + j;
+        }
+    }
+
+    const int dimr2 = 3;
+    const int dimc2 = 3;
+    double** mtx2 = new double* [dimr2];
+    for (int i = 0; i < dimr2; i++) {
+        mtx2[i] = new double[dimc2];
+        for (int j = 0; j < dimc2; j++) {
+            mtx2[i][j] = i * j;
+        }
+    }
+
+    // Letrehozzuk a cel matrixot
+    double** res = new double* [dimr1];
+    for (int i = 0; i < dimr1; i++) {
+        res[i] = new double[dimc1];
+    }
+
+    // Matrixok osszeadasa
+    double spurt = addMatrix(mtx1, dimr1, dimc1, mtx2, dimr2, dimc2, res);
+
+    // Eredmeny kii ratasa
+    std::cout << "Eredmeny:" << std::endl;
+    for (int i = 0; i < dimr1; i++) {
+        for (int j = 0; j < dimc1; j++) {
+            std::cout << res[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    // Dinamikusan allokált memória felszabadítása
+    for (int i = 0; i < dimr1; i++) {
+        delete[] mtx1[i];
+    }
+    delete[] mtx1;
+
+    for (int i = 0; i < dimr2; i++) {
+        delete[] mtx2[i];
+    }
+    delete[] mtx2;
+
+    for (int i = 0; i < dimr1; i++) {
+        delete[] res[i];
+    }
+    delete[] res;
+
+    return 0;
+}
+
+/*
+Készítsen struktúrát települések tárolására. A tárolandó attribútumok: név, lélekszám, ország. A városokat tömbben tároljuk.
+
+Egy függvénnyel rendezze a városokat lélekszám szerint csökkenő sorrendben. (rendez(Telepules* cities, int n))
+Egy másik függvénnyel írassa ki a városok rendezett listáját amiben soronként megjelenik a város neve, lélekszáma, országa. Az egyes attribútumokat egy szóközzel válassza el (kiir(Telepules* cities, int n)).
+Egy harmadik függvény írja ki a városok átlagos lélekszámát és írja ki a maximális és minimális lélekszámú városokat (osszegzes(Telepules* cities, int n))!*/
+
+#include <iostream>
+#include <algorithm>
+
+struct Telepules {
+    std::string nev;
+    int lelekszam;
+    std::string orszag;
+};
+
+bool compareByLelekszam(const Telepules& city1, const Telepules& city2) {
+    return city1.lelekszam > city2.lelekszam;
+}
+
+void rendez(Telepules* cities, int n) {
+    std::sort(cities, cities + n, compareByLelekszam);
+}
+
+void kiir(Telepules* cities, int n) {
+    for (int i = 0; i < n; i++) {
+        std::cout << cities[i].nev << " " << cities[i].lelekszam << " " << cities[i].orszag << std::endl;
+    }
+}
+
+void osszegzes(Telepules* cities, int n) {
+    int sum = 0;
+    int min_lelekszam = cities[0].lelekszam;
+    int max_lelekszam = cities[0].lelekszam;
+    for (int i = 0; i < n; i++) {
+        sum += cities[i].lelekszam;
+        if (cities[i].lelekszam < min_lelekszam) {
+            min_lelekszam = cities[i].lelekszam;
+        }
+        if (cities[i].lelekszam > max_lelekszam) {
+            max_lelekszam = cities[i].lelekszam;
+        }
+    }
+    double atlag = static_cast<double>(sum) / n;
+
+    std::cout << "Atlagos lelekszam: " << atlag << std::endl;
+    std::cout << "Legnagyobb varos: " << max_lelekszam << std::endl;
+    std::cout << "Legkisebb varos: " << min_lelekszam << std::endl;
+}
+
+int main() {
+    Telepules cities[] = {
+        {"Kunsziget", 2500, "Hungary"},
+        {"Abda", 5000, "Hungary"},
+        {"Csorna", 30000, "Hungary"}
+    };
+
+    int n = sizeof(cities) / sizeof(cities[0]);
+
+    rendez(cities, n);
+    kiir(cities, n);
+    osszegzes(cities, n);
+
+    return 0;
+}
+
+/*Készítsen egy függvényt, ami egy bemenetként kapott 2x2-es mátrixnak kiszámolja a determinánsát.  Emlékeztetőül, a determinánst 2x2-es mátrixon (ahol a mátrix [a b; c d]) az alábbi módon számíthatja ki:
+
+D = a*d - c*b
+
+Ellenőrizze, hogy a mátrix megfelelő méretű-e, vagyis pontosan 2x2-es. Ha nem megfelelő a mátrix mérete, akkor térjen vissza 0-as értékkel!*/
+
+double determinant2x2(double** mtx, const int dimr, const int dimc) {
+    // Ellenőrzés, hogy a mátrix 2x2-es-e
+    if (dimr != 2 || dimc != 2) {
+        return 0.0;
+    }
+
+    // A determináns kiszámítása a képlet alapján
+    double a = mtx[0][0];
+    double b = mtx[0][1];
+    double c = mtx[1][0];
+    double d = mtx[1][1];
+
+    double det = a * d - c * b;
+
+    return det;
+}
+
+/*Készítsen egy függvényt, ami egy tetszőleges szövegben található angol alfanumerikus karakterek (csak kis- és nagybetűk és számok) ASCII kódjainak összegzett számértékét kiszámolja! Nagy és kisbetű között ne tegyen különbséget, mindig kisbetűket adjon hozzá a végösszeghez!
+
+Ha a fordítóprogram szintaktikai hibát jelez a forrásszöveg valamelyik sorában, akkor abból 10-et kivonva kapja meg a szerkesztőben olvasható sorszámot.
+
+
+*/
+
+unsigned int textSum(std::string text)
+{
+    unsigned int sum = 0;
+    for (unsigned int i = 0; i < text.length(); i++)
+    {
+        if ((text[i] >= 'A' && text[i] <= 'Z') ||
+            (text[i] >= 'a' && text[i] <= 'z') ||
+            (text[i] >= '0' && text[i] <= '9'))
+        {
+            sum += text[i];
+        }
+    }
+    return sum;
+}
+
+/*A textSum függvény egy tetszőleges szövegben található angol alfanumerikus karakterek (kis- és nagybetűk, valamint számok) ASCII kódjainak összegét számolja ki. Először inicializál egy összegzési változót (sum) 0-val. Majd végigiterál a szöveg karakterein. Ha a karakter alfanumerikus, akkor ellenőrzi, hogy nagybetű-e, és ha igen, átalakítja kisbetűvé. Ezután hozzáadja a karakter ASCII kódját az összeghez. Végül visszaadja az összeget.
+
+Fontos megjegyezni, hogy a függvény a C++ <cctype> fejlécben található isalnum, isupper és tolower függvényeket használja a karakterek tulajdonságainak ellenőrzéséhez és átalakításához.*/
+
+
+/*Készítsen egy programot ami könyvek listáját tárolja. A fájlban soronként vesszővel elválasztva a könyv címét és oldalainak számát tároljuk.
+
+A könyveket olvassa be a KonyvLista* konyvekBeolvas(const string filename) függvénnyel, ami a könyvek eltárolására alkalmas láncolt lista mutatójával tér vissza. A beolvasás során ügyeljen arra, hogy a könyvek a cím első karaktere szerint rendezetten tárolódjanak. Implementálja a konyvListaKiir(KonyvLista* lista) függvényt is, ami kiírja standard outputra az egyes attribútumokat szóközzel elválasztva. A maxOldalszam adja vissza a leghosszabb könyvet (ebben a függvényben ne írjon ki semmit a standard outputra)!
+
+TIPP: készítsen külön beszur függvényt a sor beolvasására. A függvény egyrészt dolgozza fel a bemenetként kapott sort, másrészt szúrja be a kiolvasott elemet a listába!*/
+
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+
+struct KonyvLista
+{
+	std::string cim;
+	unsigned int pagenumber;
+	KonyvLista* next;
+};
+
+
+KonyvLista* beszur(KonyvLista* lista, const std::string& line)
+{
+	unsigned int i_sep = 0;
+	unsigned int len_line = line.length();
+	for (unsigned int i = 0; i < len_line; i++)
+	{
+		if (line[i] == ',')
+		{
+			i_sep = i;
+			break;
+		}
+	}
+	KonyvLista* n;
+	n = new KonyvLista;
+
+	n->cim = line.substr(0, i_sep);
+	n->pagenumber = atoi(line.substr(i_sep + 1, len_line - i_sep).c_str());
+	if (lista == NULL || lista->cim[0] > n->cim[0])
+	{
+		n->next = lista;
+		lista = n;
+	}
+	else
+	{
+		KonyvLista* it, * anchor = NULL;
+		for (it = lista; it != NULL && it->cim[0] <= n->cim[0]; it = it->next)
+		{
+			anchor = it;
+		}
+		n->next = it;
+		anchor->next = n;
+	}
+	return lista;
+}
+
+KonyvLista* konyvekBeolvas(const std::string filename)
+{
+	KonyvLista* lista = NULL;
+	std::ifstream f(filename.c_str());
+	if (f.is_open())
+	{
+		std::string line;
+		while (!f.eof())
+		{
+			std::getline(f, line);
+			lista = beszur(lista, line);
+		}
+	}
+	return lista;
+}
+
+void konyvListaKiir(KonyvLista* lista)
+{
+	for (KonyvLista* it = lista; it != NULL; it = it->next)
+	{
+		std::cout << it->cim << ' ' << it->pagenumber << '\n';
+	}
+}
+
+
+KonyvLista* maxOldalSzam(KonyvLista* lista)
+{
+	KonyvLista* maxkonyv = NULL;
+	for (KonyvLista* it = lista; it != NULL; it = it->next)
+	{
+		if (maxkonyv == NULL || it->pagenumber > maxkonyv->pagenumber)
+		{
+			maxkonyv = it;
+		}
+	}
+	return maxkonyv;
+}
+
+int main()
+{
+	KonyvLista* lista = konyvekBeolvas("kiskonyvtar.txt");
+	konyvListaKiir(lista);
+
+	KonyvLista* maxKonyv = maxOldalSzam(lista);
+	if (maxKonyv != nullptr) {
+		std::cout << "Leghosszabb konyv: " << maxKonyv->cim << ", oldalszam: " << maxKonyv->pagenumber << std::endl;
+	}
+
+	// Tisztítás: felszabadítjuk a memóriát
+	KonyvLista* jelenlegi = lista;
+	while (jelenlegi != nullptr) {
+		KonyvLista* kovetkezo = jelenlegi->next;
+		delete jelenlegi;
+		jelenlegi = kovetkezo;
+	}
+
+	return 0;
+}
+
+
