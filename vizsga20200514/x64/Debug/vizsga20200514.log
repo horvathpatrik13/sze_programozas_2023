@@ -1,0 +1,4 @@
+﻿  vizsga20200514.cpp
+C:\Users\horvath.patrik\Desktop\egyetem\Tantárgyak\Programozás\C++\vizsga20200514\vizsga20200514.cpp(33,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\horvath.patrik\Desktop\egyetem\Tantárgyak\Programozás\C++\vizsga20200514\vizsga20200514.cpp(143,8): error C2084: function 'gitar *szures(gitar *)' already has a body
+C:\Users\horvath.patrik\Desktop\egyetem\Tantárgyak\Programozás\C++\vizsga20200514\vizsga20200514.cpp(101,8): message : see previous definition of 'szures'

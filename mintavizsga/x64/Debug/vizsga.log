@@ -1,0 +1,3 @@
+﻿  vizsga.cpp
+C:\Users\horvath.patrik\Desktop\egyetem\Tantárgyak\Programozás\C++\vizsga\vizsga.cpp(237,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  vizsga.vcxproj -> C:\Users\horvath.patrik\Desktop\egyetem\Tantárgyak\Programozás\C++\vizsga\x64\Debug\vizsga.exe
